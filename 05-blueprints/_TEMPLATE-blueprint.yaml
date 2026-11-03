@@ -1,0 +1,44 @@
+# Blueprint: a complete system an AI agent can build, test and tear down.
+# Every value here must map to a documented tool parameter.
+id: blueprint-<name>
+title: <System name>
+status: todo                # todo | draft | verified
+last_verified: YYYY-MM-DD
+description: <What the system does, in one or two sentences.>
+
+target:
+  domain: sandbox           # build here first; production only after a passing test run
+  root_domain: cytix.cloud
+
+services:
+  - name: <service>
+    xml: "<config/>"        # see 03-formats/service-schema-xml.md
+    timeout: 30
+    description: <purpose>
+    ghosts: 0               # number for add_ghost
+    map_id: null            # set_map_id for every ghost, if set
+
+links:                      # enable_links, one entry per source service
+  - from: <source service>
+    to: [<target service>]
+
+morphs:                     # add_morphed_ghost; remember: +5 ghosts on the target per call
+  - from: { service: <source>, ghost: 1 }
+    to:   { service: <target>, ghost: 1 }
+
+users: []                   # push_user
+access: []                  # give_read_access: { service, ghost, user }
+
+test_data:                  # send_data after build
+  - service: <service>
+    ghost: 1
+    payload: {}
+
+expected_state:             # what get_domain_resources must show after build
+  - service: <service>
+    instances: 0
+    linkedTo: {}
+
+teardown:                   # order matters: morphs, links, then services
+  - remove_morphed_ghost: []
+  - remove_service: []

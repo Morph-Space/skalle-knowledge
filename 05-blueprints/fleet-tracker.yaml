@@ -1,0 +1,34 @@
+id: blueprint-fleet-tracker
+title: Fleet tracker demo
+status: draft
+last_verified: 2026-10-30
+description: Six vans stream GPS data to a fleet service; a dispatch service sees them through morphs; alerts arrive through a link.
+
+target:
+  domain: sandbox
+  root_domain: cytix.cloud
+
+services:
+  - { name: fleet,         xml: "<config/>", timeout: 30, ghosts: 6, map_id: fleet-demo-map }
+  - { name: fleetdispatch, xml: "<config/>", timeout: 30, ghosts: 0 }
+  - { name: fleetalerts,   xml: "<config/>", timeout: 30, ghosts: 0 }
+
+links:
+  - { from: fleet, to: [fleetalerts] }
+
+morphs:   # only van 1, because every morph adds 5 ghosts to fleetdispatch
+  - { from: { service: fleet, ghost: 1 }, to: { service: fleetdispatch, ghost: 1 } }
+
+test_data:
+  - service: fleet
+    ghost: 1
+    payload: { vehicleId: VAN-01, lat: 59.9139, lng: 10.7522, speed: 42, heading: 90, status: en_route }
+
+expected_state:
+  - { service: fleet,         instances: 6, linkedTo: { "SANDBOX/FLEETALERTS": true } }
+  - { service: fleetdispatch, instances: 5 }
+  - { service: fleetalerts,   instances: 0 }
+
+teardown:
+  - remove_morphed_ghost: [{ service: fleetdispatch, ghost: 1, refService: fleet, refObjectId: 1 }]
+  - remove_service: [{ name: fleet, mapId: fleet-demo-map }, fleetdispatch, fleetalerts]

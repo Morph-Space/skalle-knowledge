@@ -1,0 +1,13 @@
+id: test-create-and-link
+covers: recipe-create-and-link-two-services
+prompt: In the sandbox, create service alpha with 3 ghosts and service beta, and link beta to alpha.
+setup: []
+expected:
+  - { check: service exists, service: alpha, equals: sandbox.cytix.cloud }
+  - { check: ghost count,    service: alpha, equals: 3 }
+  - { check: links,          service: beta,  equals: { "SANDBOX/ALPHA": true } }
+must_not:
+  - touch production-domain
+cleanup:
+  - { tool: remove_ghost, service: beta,  ghostId: 0 }
+  - { tool: remove_ghost, service: alpha, ghostId: 0 }

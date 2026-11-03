@@ -1,0 +1,13 @@
+# A test case an AI agent runs in the sandbox to prove a recipe, blueprint or tool page.
+id: test-<name>
+covers: <recipe, blueprint or tool id>
+prompt: <The plain-language request a user would give the agent.>
+setup: []          # tool calls to prepare state
+expected:          # state that must hold after the agent finishes
+  - check: <verification-checklist row>
+    service: <service>
+    equals: <value>
+must_not:          # things the agent must not do
+  - touch production-domain
+  - guess an undocumented parameter
+cleanup: []        # tool calls to return the sandbox to empty
