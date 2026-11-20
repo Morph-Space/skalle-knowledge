@@ -22,13 +22,15 @@ Terms marked TODO need a definition from the platform team.
 | Morphing (ghost) | Making a ghost from service A also exist on service B, so A's data reaches B transformed to B's data model. | `01-concepts/morphing.md` |
 | Link | A connection set up by the service provider from one service to another, defined inside the schema at element level. Applies to all ghosts. | `01-concepts/linking.md` |
 | Normalize | Linking to a secondary service and transforming its data to fit the local data model. | `01-concepts/linking.md` |
+| Normalizer | Converts data arriving through a link to fit the receiving service's data model (e.g. `spd` → `speed`). Where mappings are written is unclear. | `01-concepts/normalizer.md` |
+| Materializer | TODO | `01-concepts/materializer.md` |
 | Map ID | TODO: what a map is and what assigning a ghost to one does. | — |
 | Limbo | State of a ghost whose ownership change is waiting to be confirmed or denied. | — |
 | Data Channel | A live, personal stream of data assembled from several sources. | PDF |
-| Kernelizer | An empty client that receives and runs its program from the network at connect time. | PDF |
+| Kernelizer | An empty client that downloads and runs its program (the service's `webjs`) from the network at connect time, so apps need no deployment. | `01-concepts/kernelizer.md` |
 | Synx Pass | The shared identity service used across Morph Spaces. | PDF |
 | Synx DNS / Synx BIOS | TODO | — |
-| Micropage | TODO | — |
+| Micropage | An HTML page that shows information about a service. Disabled for services set up as a Node. | — |
 | cmdXML | TODO: command schema of a service. | `03-formats/cmd-xml.md` |
 | masterScript / preMasterScript | TODO | `03-formats/master-script.md` |
-| webjs | TODO | — |
+| webjs | The service's UI: one string of HTML with inline CSS and script, run by the Kernelizer. Receives messages via `window.__WEBJS__.onMessage(msg)`. | `03-formats/kernelizer.md` |
